@@ -9,13 +9,44 @@ const schema = new mongoose.Schema(
         username: { type: String, required: true },
         paymentMethod: { type: Object, default: {bank:[], visa: []} },
         pushToken: {type:String},
-        favouriteFoods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Foods' }]
-
+        favouriteFoods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Foods' }],
     },
     { timestamps: true }
 );
 
 export const UserModel = mongoose.model("Users", schema);
+
+export const addPointsToUser = async (userId) => {
+    try {
+
+        const updatedDocument = await UserModel.findByIdAndUpdate(
+            userId, 
+            {
+                $inc: {
+                    point: 500
+                }
+            }, {new: true})
+        return updatedDocument
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const removePointsFromUser = async (userId) => {
+    try {
+       
+        const updatedDocument = await UserModel.findByIdAndUpdate(
+            userId, 
+            {
+                $set: {
+                    point: 0
+                }
+            }, {new: true})
+        return updatedDocument
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export const addFavouriteFood = async (userId, foodId) => {
     try {
@@ -39,7 +70,7 @@ export const addFavouriteFood = async (userId, foodId) => {
 export const addAddress = async (userId, address) => {
     try {
 
-        const user = UserModel.findById(userId)
+       
         const updatedDocument = await UserModel.findByIdAndUpdate(
             userId,
             {

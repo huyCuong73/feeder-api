@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { UserModel, addAddress, addBankPayment, addFavouriteFood, deleteAddress, updatePhoneNumberAddress, updatePushToken } from "../models/User.js";
+import { UserModel, addAddress, addBankPayment, addFavouriteFood, addPointsToUser, deleteAddress, removePointsFromUser, updatePhoneNumberAddress, updatePushToken } from "../models/User.js";
 import jwt, { verify } from "jsonwebtoken";
 import dotenv from "dotenv"
 import verifyUser from "../middleware/verifyUser.js";
@@ -35,7 +35,7 @@ router.post("/add-address", async (req, res) => {
     try {
         const updatedDocument = await addAddress(req.body.userId, req.body.address)
 
-        res.status(200).json(updatedDocument)
+        return res.status(200).json(updatedDocument)
     } catch (error) {
         
     }
@@ -45,7 +45,7 @@ router.post("/delete-address", async (req, res) => {
     try {
         const updatedDocument = await deleteAddress(req.body.userId, req.body.addressNo)
 
-        res.status(200).json(updatedDocument)
+        return res.status(200).json(updatedDocument)
     } catch (error) {
         
     }
@@ -55,7 +55,7 @@ router.post("/update-phone-number-address", async (req, res) => {
     try {
         const updatedDocument = await updatePhoneNumberAddress(req.body.userId, req.body.addressNo, req.body.phoneNumber)
 
-        res.status(200).json(updatedDocument)
+        return res.status(200).json(updatedDocument)
     } catch (error) {
         
     }
@@ -66,9 +66,30 @@ router.post("/add-bank-payment", async (req, res) => {
  
         const updatedDocument = await addBankPayment(req.body.userId, req.body.bankInfo)
 
-        res.status(200).json(updatedDocument)
+        return res.status(200).json(updatedDocument)
     } catch (error) {
+        console.log(error)
+    }
+})
+
+
+router.post("/add-user-point", async (req,res) => {
+    try {
+        const updatedUser = await addPointsToUser(req.body.userId)
         
+        res.status(200).json(updatedUser)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post("/remove-user-point", async (req,res) => {
+    try {
+        
+        const updatedUser = await removePointsFromUser(req.body.userId)
+        res.status(200).json(updatedUser)
+    } catch (error) {
+        console.log(error)
     }
 })
 

@@ -30,7 +30,8 @@ const schema = new mongoose.Schema(
         voucher: { type: String, ref: "Vouchers" , default: ""},
         shipper: { type: mongoose.Schema.Types.ObjectId, ref: "Shippers" },
         rated: {type: Boolean, default: false},
-        phoneNumber: {type: String, required: true}
+        phoneNumber: {type: String, required: true},
+        userPoint: {type: Number, default: 0}
     },
     { timestamps: true }
 );
