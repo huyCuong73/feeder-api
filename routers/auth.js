@@ -12,6 +12,7 @@ router.post("/register", async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
         const username = req.body.username;
+        const phoneNumber = req.body.phoneNumber;
 
         const authInfo = new AuthModel({
             email,
@@ -22,6 +23,7 @@ router.post("/register", async (req, res) => {
             email,
             address: {},
             username,
+            phoneNumber
         });
 
   
@@ -91,7 +93,7 @@ router.post("/login", async (req, res) => {
             if (userCre.type == "user") {
                 const userInfo = await UserModel.findOne({
                     email: userCre.email,
-                }).populate('favouriteFoods');
+                })
 
                 jwt.sign(
                     { id: userInfo._doc._id, type: userCre.type },
@@ -137,6 +139,34 @@ router.post("/login", async (req, res) => {
                                 user: { ...shipperInfo._doc },
                                 accessToken: token,
                                 type:"shipper"
+                            });
+                    }
+                );
+            }
+
+            if (userCre.type == "supporter") {
+
+                console.log(1)
+                const supporterInfo = await UserModel.findOne({
+                    email: userCre.email,
+                });
+
+        
+                jwt.sign(
+                    { id: supporterInfo._doc._id, type: userCre.type },
+                    "abcd",
+                    (err, token) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).json(err);
+                        }
+                   
+                        return res
+                            .status(200)
+                            .json({
+                                user: { ...supporterInfo._doc },
+                                accessToken: token,
+                                type:"supporter"
                             });
                     }
                 );

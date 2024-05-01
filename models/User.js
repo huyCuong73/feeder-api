@@ -5,7 +5,7 @@ const schema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         point: {type: Number, default: 0},
         address: { type: Array },
-        phoneNumber: {type: String, required: true},
+        phoneNumber: {type: String},
         username: { type: String, required: true },
         paymentMethod: { type: Object, default: {bank:[], visa: []} },
         pushToken: {type:String},

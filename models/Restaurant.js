@@ -36,6 +36,14 @@ schema.index({ location: "2dsphere" });
 
 export const RestaurantModel = mongoose.model("Restaurants", schema);
 
+
+
+export const findRestaurantById = async (restaurantId) => {
+
+    const restaurant = await RestaurantModel.findById(restaurantId)
+    return restaurant
+}
+
 export const addRestaurantRating = async (restaurantId, rating) => {
     try {
         const restaurant = await RestaurantModel.findById(restaurantId);
