@@ -38,6 +38,31 @@ export const RestaurantModel = mongoose.model("Restaurants", schema);
 
 
 
+
+export const findFavouriteRestaurant = async (restaurantIds) => {
+    console.log(restaurantIds)
+    try {
+        const restaurants = await RestaurantModel.aggregate([
+          {
+            $match: {
+              _id: { $in: restaurantIds.map(id => mongoose.Types.ObjectId(id)) }
+            }
+          },
+          {
+            $geoNear: {
+              distanceField: "distance",
+              spherical: true
+            }
+          }
+        ]);
+        return restaurants;
+      } catch (err) {
+        console.log(err);
+      }
+}
+
+
+
 export const findRestaurantById = async (restaurantId) => {
 
     const restaurant = await RestaurantModel.findById(restaurantId)
@@ -108,6 +133,7 @@ export const findNearbyRestaurants = async (userLng, userLat) => {
         throw error;
     }
 };
+
 
 export const findTopSellingRestaurants = async (userLng, userLat) => {
     try {

@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { UserModel, addAddress, addBankPayment, addFavouriteFood, addPointsToUser, deleteAddress, removePointsFromUser, updatePhoneNumberAddress, updatePushToken } from "../models/User.js";
+import { UserModel, addAddress, addBankPayment, addFavouriteRestaurant, addPointsToUser, deleteAddress, removeFavouriteRestaurant, removePointsFromUser, updatePhoneNumberAddress, updatePushToken } from "../models/User.js";
 import jwt, { verify } from "jsonwebtoken";
 import dotenv from "dotenv"
 import verifyUser from "../middleware/verifyUser.js";
@@ -8,10 +8,20 @@ dotenv.config();
 
 
 
-router.post("/add-favourite-food", async (req,res) => {
+router.post("/add-favourite-restaurant", async (req,res) => {
     try {
-        console.log(req.body);
-        const user = await addFavouriteFood(req.body.userId, req.body.foodId)
+    
+        const user = await addFavouriteRestaurant(req.body.userId, req.body.restaurantId)
+        return res.status(200).json(user)
+    } catch (error) {
+        console.log(error);
+    }  
+})
+
+router.post("/remove-favourite-restaurant", async (req,res) => {
+    try {
+       
+        const user = await removeFavouriteRestaurant(req.body.userId, req.body.restaurantId)
         return res.status(200).json(user)
     } catch (error) {
         console.log(error);

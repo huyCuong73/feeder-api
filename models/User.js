@@ -9,7 +9,7 @@ const schema = new mongoose.Schema(
         username: { type: String, required: true },
         paymentMethod: { type: Object, default: {bank:[], visa: []} },
         pushToken: {type:String},
-        favouriteFoods: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Foods' }],
+        favouriteRestaurants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurants' }],
     },
     { timestamps: true }
 );
@@ -48,13 +48,13 @@ export const removePointsFromUser = async (userId) => {
     }
 }
 
-export const addFavouriteFood = async (userId, foodId) => {
+export const addFavouriteRestaurant = async (userId, restaurantId) => {
     try {
         const updatedDocument = await UserModel.findByIdAndUpdate(
             userId,
             {
                 $push: {
-                    favouriteFoods: foodId,
+                    favouriteRestaurants: restaurantId,
                 },
             },
             { new: true }
@@ -66,6 +66,19 @@ export const addFavouriteFood = async (userId, foodId) => {
     }
 }
 
+export const removeFavouriteRestaurant = async (userId, restaurantId) => {
+    try {
+
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            userId,
+            { $pull: { favouriteRestaurants: restaurantId } },
+            { new: true }
+          );
+        return updatedUser;
+    } catch (error) {
+        console.log("addAddress err", error);
+    }
+};
 
 export const addAddress = async (userId, address) => {
     try {
@@ -87,6 +100,8 @@ export const addAddress = async (userId, address) => {
     }
 };
 
+
+
 export const deleteAddress = async (userId, addressNo) => {
     try {
 
@@ -94,7 +109,7 @@ export const deleteAddress = async (userId, addressNo) => {
             userId,
             { $pull: { address: { addressNo: addressNo } } },
             { new: true }
-          );
+        );
 
         return user;
     } catch (error) {

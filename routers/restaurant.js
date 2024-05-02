@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
-import { RestaurantModel, addRestaurant, addRestaurantRating, findHighestRatedRestaurants, findNearbyRestaurants, findRestaurantById, findTopSellingRestaurants } from "../models/Restaurant.js";
+import { RestaurantModel, addRestaurant, addRestaurantRating, findFavouriteRestaurant, findHighestRatedRestaurants, findNearbyRestaurants, findRestaurantById, findTopSellingRestaurants } from "../models/Restaurant.js";
 
 dotenv.config();
 
@@ -16,6 +16,12 @@ router.post("/find-nearest-restaurants", async (req, res) => {
 
     const nearbyRestaurants = await findNearbyRestaurants(req.body.longitude, req.body.latitude);
     return res.status(200).json(nearbyRestaurants);
+}) 
+
+router.post("/find-favourite-restaurants", async (req, res) => {
+    console.log(req.body)
+    const restaurants = await findFavouriteRestaurant(req.body.restaurantIds);
+    return res.status(200).json(restaurants);
 }) 
 
 router.get("/find-top-selling-restaurants", async (req, res) => {

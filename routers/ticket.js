@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
-import { createTicket, findAllTicketByUserId } from "../models/Ticket.js";
+import { createTicket, createTicketResponse, findAllTicketByUserId, getAllTicket } from "../models/Ticket.js";
 
 
 dotenv.config();
@@ -22,12 +22,27 @@ router.post("/create-new-ticket", async (req, res) => {
 
 }) 
 
-router.post("/add-user-using-voucher", async (req, res) => {
+router.post("/add-ticket-response", async (req, res) => {
     try {
 
-        const voucherUpdated = await addUserUsingVoucher(req.body.voucherId, req.body.userId)
+   
+        const updatedTicket = await createTicketResponse(req.body.ticketId, req.body.response)
+   
+        return res.status(200).json(updatedTicket)
+        
+    } catch (error) {
+        console.log(error);
+    }
+
+}) 
+
+
+router.get("/get-all-tickets", async (req, res) => {
+    try {
+
+        const tickets = await getAllTicket()
     
-        return res.status(200).json(voucherUpdated)
+        return res.status(200).json(tickets)
         
     } catch (error) {
         console.log(error);        
